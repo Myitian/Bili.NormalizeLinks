@@ -1,2 +1,4 @@
 # Bili.NormalizeLinks
-替换Bilibili部分链接为带href的常规a元素
+替换Bilibili部分链接为带href的常规a元素。由于Bilibili采用了向非Anchor元素绑定闭包中的事件监听函数，导致常规方式无法获知实际地址，也无法使用浏览器对a元素特化的右键菜单。这个脚本会拦截addEventListener以尝试获取真实链接。
+
+替换过程可能比较激进，如果以后B站修改前端代码，可能导致意料外的样式和效果。也可能会和其他修改B站页面的脚本出现冲突。

@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "checkJs": true,
+        "typeRoots": [
+            "./defs"
+        ]
+    },
+    "include": [
+        "*.js",
+        "./defs/*.d.ts"
+    ]
+}

@@ -1,0 +1,2 @@
+# Bili.NormalizeLinks
+替换Bilibili部分链接为带href的常规a元素

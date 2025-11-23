@@ -99,9 +99,9 @@ function getPromiseFromEvent(target, event) {
     const listener = () => {
       target.removeEventListener(event, listener);
       resolve();
-    }
+    };
     target.addEventListener(event, listener);
-  })
+  });
 }
 
 async function replace() {
@@ -185,7 +185,7 @@ function replaceUserId(e, attr = 'data-user-id') {
 function changeElementToAnchor(element) {
   const ne = document.createElement('a');
   for (const t of element.attributes) {
-    ne.setAttribute(t.name, t.value)
+    ne.setAttribute(t.name, t.value);
   }
   for (const t of Array.from(element.childNodes)) {
     ne.appendChild(t);

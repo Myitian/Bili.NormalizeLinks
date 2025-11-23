@@ -20,7 +20,7 @@ const dummyEvent = new Event('click');
 const callState = {
   special: false,
   url: ""
-}
+};
 /**
  * @type {[target: Element, url: string][]}
  */

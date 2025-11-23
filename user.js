@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         更好的链接 - 替换 Bilibili 部分链接为带 href 的常规 a 元素
+// @name         规范化链接 - 替换Bilibili部分链接为带href的常规a元素
 // @namespace    myitian.js.bili.NormalizeLinks
 // @version      0.1
-// @description  替换 Bilibili 部分链接为带 href 的常规 a 元素，使其右键菜单出现“在新标签页打开链接”“在新窗口打开链接”等选项
+// @description  替换Bilibili部分链接为带href的常规a元素，以提升可访问性，获得原生链接的体验（如右键菜单的“在新标签页打开链接”“在新窗口打开链接”等选项）。
 // @source       https://github.com/Myitian/Bili.NormalizeLinks
 // @author       Myitian
 // @license      MIT

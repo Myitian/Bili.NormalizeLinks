@@ -55,7 +55,7 @@ EventTarget.prototype.addEventListener = function (type, callback, ...args) {
       }
     }
     if (callState.url !== "" && this instanceof Element) {
-      console.log(`[RBLTHA] Found URL: ${callState.url}`);
+      console.log(`[BiliNrmLnk] Found URL: ${callState.url}`);
       if (tryInstantReplace && this.isConnected) {
         replaceUrl(changeElementToAnchor(this), callState.url);
       } else {
@@ -106,7 +106,7 @@ function getPromiseFromEvent(target, event) {
 
 async function replace() {
   if (waitingCount > 2) {
-    console.log('[RBLTHA] Too many waiting replacement. Canceled new replacement.');
+    console.log('[BiliNrmLnk] Too many waiting replacement. Canceled new replacement.');
     return;
   }
   if (running) {
@@ -124,34 +124,34 @@ async function replace() {
   // 旧版替换逻辑。其中部分内容可能已经无法用于现在的Bilibili，但这些代码应该不会造成负面问题。
   let c = 0;
   /** @type {NodeListOf<HTMLAnchorElement>} */
-  const urlA = document.querySelectorAll('a.jump-link[data-url]:not([data-rbltha-replaced])');
+  const urlA = document.querySelectorAll('a.jump-link[data-url]:not([data-bilinrmlnk-replaced])');
   for (const e of urlA) {
     replaceUrl(e);
     c++;
   }
   /** @type {NodeListOf<HTMLAnchorElement>} */
-  const userA = document.querySelectorAll('a.jump-link[data-user-id]:not([data-rbltha-replaced])');
+  const userA = document.querySelectorAll('a.jump-link[data-user-id]:not([data-bilinrmlnk-replaced])');
   for (const e of userA) {
     replaceUserId(e);
     c++;
   }
-  const oidNA = document.querySelectorAll('.bili-rich-text-module.at[data-oid]:not([data-rbltha-replaced])');
+  const oidNA = document.querySelectorAll('.bili-rich-text-module.at[data-oid]:not([data-bilinrmlnk-replaced])');
   for (const e of oidNA) {
     replaceUserId(changeElementToAnchor(e), 'data-oid');
     c++;
   }
-  const ridNA = document.querySelectorAll('.opus-text-rich-hl.at[data-rid]:not([data-rbltha-replaced])');
+  const ridNA = document.querySelectorAll('.opus-text-rich-hl.at[data-rid]:not([data-bilinrmlnk-replaced])');
   for (const e of ridNA) {
     replaceUserId(changeElementToAnchor(e), 'data-rid');
     c++;
   }
-  const userNA = document.querySelectorAll('.root-reply-avatar[data-user-id]:not([data-rbltha-replaced]),.user-name[data-user-id]:not([data-rbltha-replaced]),.sub-user-name[data-user-id]:not([data-rbltha-replaced]),.sub-reply-avatar[data-user-id]:not([data-rbltha-replaced])');
+  const userNA = document.querySelectorAll('.root-reply-avatar[data-user-id]:not([data-bilinrmlnk-replaced]),.user-name[data-user-id]:not([data-bilinrmlnk-replaced]),.sub-user-name[data-user-id]:not([data-bilinrmlnk-replaced]),.sub-reply-avatar[data-user-id]:not([data-bilinrmlnk-replaced])');
   for (const e of userNA) {
     replaceUserId(changeElementToAnchor(e));
     c++;
   }
   running = false;
-  console.log(`[RBLTHA] Replacement completed. ${c} element(s) effected.`);
+  console.log(`[BiliNrmLnk] Replacement completed. ${c} element(s) effected.`);
   eventTarget.dispatchEvent(customEvent);
 }
 
@@ -161,7 +161,7 @@ async function replace() {
  */
 function replaceUrl(e, newUrl = undefined) {
   e.href = newUrl ?? e.dataset.url;
-  e.setAttribute("data-rbltha-replaced", "");
+  e.setAttribute("data-bilinrmlnk-replaced", "");
   e.target = '_blank';
   e.onclick = null;
   originalAddEventListener.call(e, 'click', stopImmediatePropagation, true);
@@ -173,7 +173,7 @@ function replaceUrl(e, newUrl = undefined) {
  */
 function replaceUserId(e, attr = 'data-user-id') {
   e.href = 'https://space.bilibili.com/' + e.getAttribute(attr);
-  e.setAttribute("data-rbltha-replaced", "");
+  e.setAttribute("data-bilinrmlnk-replaced", "");
   e.target = '_blank';
   e.onclick = null;
   originalAddEventListener.call(e, 'click', stopImmediatePropagation, true);
@@ -205,12 +205,12 @@ function getDefaultDisplay(tagName) {
   const tag = tagName.toLowerCase();
   let display = defaultDisplayCache[tag];
   if (display) {
-    return `data-rbltha-display-${display}`;
+    return `data-bilinrmlnk-display-${display}`;
   }
   const temp = document.createElement(tag);
   document.body.appendChild(temp);
   display = window.getComputedStyle(temp).display;
-  const attrKey = `data-rbltha-display-${display}`;
+  const attrKey = `data-bilinrmlnk-display-${display}`;
   if (!displayCache.has(display)) {
     temp.outerHTML = `<style>:where([${attrKey}]){display:${display}}</style>`;
     displayCache.add(display);

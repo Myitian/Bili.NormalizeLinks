@@ -66,9 +66,9 @@ document.addEventListener('DOMContentLoaded', replace);
 window.addEventListener('mousedown', replace);
 window.addEventListener('keydown', replace);
 window.addEventListener('load', () => {
-  replace();
   // 在load后处理。防止在框架注册的load执行完毕前就处理，导致内容错误。
   // 考虑到部分事件监听器可能是异步网络操作，需要尝试等待其完成。
+  // 通常来说，等待时间不会太长，在1~3次循环内就能完成。
   // 如果100*100ms（十秒）后仍有剩余，将其剩余内容传递到全局window方便调试。
   console.log(`[BiliNrmLnk] processing ${pending.length} pending callback(s) after window.load`);
   let count = 100;
@@ -81,6 +81,7 @@ window.addEventListener('load', () => {
       }
       return;
     }
+    replace();
     const oldPending = Array.from(pending);
     pending.length = 0;
     for (const it of oldPending) {

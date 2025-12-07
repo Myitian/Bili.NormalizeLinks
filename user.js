@@ -47,8 +47,7 @@ EventTarget.prototype.addEventListener = function (type, callback, ...args) {
       const status = predicate(callback, this);
       switch (status) {
         case 1:
-          if (tryInstantReplace && this.isConnected) {
-            detectAndReplace(this, callback);
+          if (tryInstantReplace && this.isConnected && detectAndReplace(this, callback)) {
             return;
           }
           pending.push([this, callback]);
@@ -62,7 +61,6 @@ EventTarget.prototype.addEventListener = function (type, callback, ...args) {
   originalAddEventListener.call(this, type, callback, ...args);
 };
 
-document.addEventListener('DOMContentLoaded', replace);
 window.addEventListener('mousedown', replace);
 window.addEventListener('keydown', replace);
 window.addEventListener('load', () => {
@@ -150,6 +148,7 @@ function replace() {
     /** @type {NodeListOf<HTMLAnchorElement>} */
     const urlCollectionTitle = document.querySelectorAll('.video-pod a.title.jumpable:not([data-bilinrmlnk-replaced])');
     for (const e of urlCollectionTitle) {
+      console.debug(e);
       const m = /\/\/space\.bilibili\.com\/([^\/]+)\/channel\/collectiondetail\?(?:.+&)?sid=([^&]+)/.exec(e.href);
       if (!m) continue;
       replaceUrl(e, `https://space.bilibili.com/${m[1]}/lists/${m[2]}`, true);
@@ -160,6 +159,7 @@ function replace() {
     /** @type {NodeListOf<HTMLElement>} */
     const elements = document.querySelectorAll('.list-content .list-content-item[data-id]:not([data-bilinrmlnk-replaced])');
     for (const e of elements) {
+      console.debug(e);
       const url = `https://www.bilibili.com/read/cv${e.dataset.id}`;
       const title = e.querySelector(".title");
       if (title) {
@@ -181,6 +181,7 @@ function replace() {
     /** @type {NodeListOf<HTMLAnchorElement>} */
     const elements = document.querySelectorAll('a.jump-link[data-url]:not([data-bilinrmlnk-replaced])');
     for (const e of elements) {
+      console.debug(e);
       replaceUrl(e);
       c++;
     }
@@ -189,6 +190,7 @@ function replace() {
     /** @type {NodeListOf<HTMLAnchorElement>} */
     const elements = document.querySelectorAll('a.jump-link[data-user-id]:not([data-bilinrmlnk-replaced])');
     for (const e of elements) {
+      console.debug(e);
       replaceFromAttribute(e, 'https://space.bilibili.com/', 'data-user-id');
       c++;
     }
@@ -196,6 +198,7 @@ function replace() {
   {
     const elements = document.querySelectorAll('.bili-rich-text-module.at[data-oid]:not([data-bilinrmlnk-replaced])');
     for (const e of elements) {
+      console.debug(e);
       replaceFromAttribute(changeElementToAnchor(e), 'https://space.bilibili.com/', 'data-oid');
       c++;
     }
@@ -203,6 +206,7 @@ function replace() {
   {
     const elements = document.querySelectorAll('.opus-text-rich-hl.at[data-rid]:not([data-bilinrmlnk-replaced])');
     for (const e of elements) {
+      console.debug(e);
       replaceFromAttribute(changeElementToAnchor(e), 'https://space.bilibili.com/', 'data-rid');
       c++;
     }
@@ -210,6 +214,7 @@ function replace() {
   {
     const elements = document.querySelectorAll('.root-reply-avatar[data-user-id]:not([data-bilinrmlnk-replaced]),.user-name[data-user-id]:not([data-bilinrmlnk-replaced]),.sub-user-name[data-user-id]:not([data-bilinrmlnk-replaced]),.sub-reply-avatar[data-user-id]:not([data-bilinrmlnk-replaced])');
     for (const e of elements) {
+      console.debug(e);
       replaceFromAttribute(changeElementToAnchor(e), 'https://space.bilibili.com/', 'data-user-id');
       c++;
     }

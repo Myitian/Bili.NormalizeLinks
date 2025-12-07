@@ -69,7 +69,7 @@ window.addEventListener('load', () => {
   // 在load后处理。防止在框架注册的load执行完毕前就处理，导致内容错误。
   // 考虑到部分事件监听器可能是异步网络操作，需要尝试等待其完成。
   // 通常来说，等待时间不会太长，在1~3次循环内就能完成。
-  // 如果100*100ms（十秒）后仍有剩余，将其剩余内容传递到全局window方便调试。
+  // 如果100*100ms（十秒）后仍有剩余，将其传递到全局window方便调试。
   console.log(`[BiliNrmLnk] processing ${pending.length} pending callback(s) after window.load`);
   let count = 100;
   const id = setInterval(() => {
@@ -146,7 +146,6 @@ function predicate(func, target) {
 
 function replace() {
   let c = 0;
-  // 补充的特定目标修复——提供更准确的目标地址
   {
     /** @type {NodeListOf<HTMLAnchorElement>} */
     const urlCollectionTitle = document.querySelectorAll('.video-pod a.title.jumpable:not([data-bilinrmlnk-replaced])');
@@ -157,18 +156,6 @@ function replace() {
       c++;
     }
   }
-  // 旧版替换逻辑
-  c += basicReplace();
-  if (c) {
-    console.log(`[BiliNrmLnk] Replacement completed. ${c} element(s) effected.`);
-  }
-}
-
-/**
- * 基于元素选择器的基础替换逻辑。其中部分内容可能过时，但在确定Bilibili完全不再使用对应逻辑后才能移除。
- */
-function basicReplace() {
-  let c = 0;
   if (location.pathname.startsWith("/read/readlist/")) {
     /** @type {NodeListOf<HTMLElement>} */
     const elements = document.querySelectorAll('.list-content .list-content-item[data-id]:not([data-bilinrmlnk-replaced])');
@@ -227,7 +214,9 @@ function basicReplace() {
       c++;
     }
   }
-  return c;
+  if (c) {
+    console.log(`[BiliNrmLnk] Replacement completed. ${c} element(s) effected.`);
+  }
 }
 
 /**
